@@ -51,7 +51,7 @@ const Home = () => {
               <span className="text-blue-300"> Printed to Perfection</span>
             </h1>
             <p className="text-xl mb-8 text-gray-100">
-              Professional printing services tailored to your needs. From business cards to banners, we deliver excellence.
+              Professional printing and website development services tailored to your needs. From business cards to banners, we build websites too.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
