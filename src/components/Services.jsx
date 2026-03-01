@@ -1,7 +1,7 @@
-// components/Services.js
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiPrinter, FiImage, FiPenTool, FiScissors, FiLayout, FiPackage } from 'react-icons/fi';
+import { FiPrinter, FiImage, FiPenTool, FiScissors, FiLayout, FiPackage, FiMonitor } from 'react-icons/fi';
 
 const Services = () => {
   const services = [
@@ -22,6 +22,12 @@ const Services = () => {
       title: 'Graphic Design',
       description: 'Professional design services that transform your ideas into visually compelling materials aligned with your brand identity.',
       features: ['Logo Design', 'Brand Identity', 'Print Layout', 'Digital Assets']
+    },
+      {
+    icon: <FiMonitor className="text-4xl" />,
+    title: 'Website Development',
+    description: 'Custom website development services tailored to your business needs. From simple landing pages to complex e-commerce solutions, we build responsive, user-friendly websites that drive results.',
+    features: ['Responsive Design', 'E-commerce Solutions', 'Custom CMS', 'Website Maintenance', 'SEO Optimization', 'Landing Pages']
     },
     {
       icon: <FiScissors className="text-4xl" />,
