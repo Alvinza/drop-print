@@ -11,6 +11,7 @@ const Contact = () => {
     phone: '',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -21,23 +22,48 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Simulate form submission
+    setIsSubmitting(true);
+
+    // Create form data
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("phone", formData.phone);
+    formDataToSend.append("message", formData.message);
+    // access key for Web3Forms
+    formDataToSend.append("access_key", "ac0ea1e3-87c3-4016-8df4-9f62d0403230");
+
+    // Submit form data to Web3Forms with toast promise
     toast.promise(
-      new Promise((resolve) => setTimeout(resolve, 2000)),
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formDataToSend,
+      }).then(async (response) => {
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.message || 'Failed to send message');
+        }
+        
+        return data;
+      }),
       {
         loading: 'Sending message...',
         success: 'Message sent successfully!',
-        error: 'Failed to send message',
+        error: (err) => err.message || 'Failed to send message',
       }
-    );
-
-    // Reset form after submission
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: '',
+    ).then(() => {
+      // Reset form after successful submission
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+      });
+    }).catch((error) => {
+      console.error('Error:', error);
+    }).finally(() => {
+      setIsSubmitting(false);
     });
   };
 
@@ -147,6 +173,7 @@ const Contact = () => {
                       required
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                       placeholder="John Doe"
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -163,6 +190,7 @@ const Contact = () => {
                       required
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                       placeholder="john@example.com"
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -178,6 +206,7 @@ const Contact = () => {
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                       placeholder="+1 (555) 000-0000"
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -194,15 +223,17 @@ const Contact = () => {
                       rows="5"
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition resize-none"
                       placeholder="Tell us about your project..."
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 group"
+                  disabled={isSubmitting}
+                  className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                   <FiSend className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </form>
